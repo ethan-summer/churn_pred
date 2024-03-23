@@ -1,0 +1,108 @@
+*{
+			margin: 0;
+			padding: 0;
+		}
+		body{
+		  width: 100%;
+		  height: 100%;
+		  background: radial-gradient(#fff, lightblue); 
+		}
+		.container{
+			width:300px;
+			height:300px;
+			margin:200px auto;
+			perspective:20000px;
+		}
+		.box{
+			width:300px;
+			height:300px;
+			/*border:1px solid transparent;*/
+			box-sizing: border-box;
+			position:relative;
+			transform-style:preserve-3d;
+			/*transform:rotateX(30deg) rotateY(30deg);*/
+			animation: rotate 2.5s ease infinite;
+		}
+		@keyframes rotate{
+		    0%{
+				transform:rotatex(0deg) rotatey(0deg) rotatez(0deg);
+			}
+			100%{
+				transform:rotatex(360deg) rotatey(360deg) rotatez(360deg);
+			}
+		}
+
+		.box-page{
+			width: 300px;
+			height: 300px;
+			position:absolute;
+			/*box-sizing: border-box;*/
+			transform-style:preserve-3d;
+		}
+
+
+		.top{
+			transform: translateZ(150px);
+		}
+		.bottom{
+			transform: translateZ(-150px) rotateX(180deg);
+		}
+		.right{
+			transform: translateX(150px) rotateY(90deg);
+		}
+		.left{
+			transform: translateX(-150px) rotateY(-90deg);
+		}
+		.after{
+			transform: translateY(-150px) rotateX(90deg);
+		}
+		.before{
+			transform: translateY(150px) rotateX(-90deg);
+		}
+
+
+		@keyframes a1{
+			0%{
+				transform: translateZ(0px) scale(1) rotateZ(0deg);
+				
+			}
+			20%{
+				transform: translateZ(300px) scale(0) rotateZ(720deg);
+			}
+			90%{
+				transform: translateZ(300px) scale(0) rotateZ(720deg);
+			}
+			100%{
+                  transform: translateZ(0px) scale(1) rotateZ(0deg);
+			}
+		}
+
+	
+                                   .box-page div:nth-child(1){
+                            animation: a1 3.2s ease-in
+}
+    .box-page div:nth-child(2){
+                            animation: a1 3.2s ease-in 0.2s
+}
+    .box-page div:nth-child(3){
+                            animation: a1 3.2s ease-in 0.4s
+}
+    .box-page div:nth-child(4){
+                            animation: a1 3.2s ease-in 0.6s
+}
+    .box-page div:nth-child(5){
+                            animation: a1 3.2s ease-in 0.8s
+}
+    .box-page div:nth-child(6){
+                            animation: a1 3.2s ease-in 1s
+}    .box-page div:nth-child(7){
+                            animation: a1 3.2s ease-in 1.2s
+}    .box-page div:nth-child(8){
+                            animation: a1 3.2s ease-in 1.4s
+}    .box-page div:nth-child(9){
+                            animation: a1 3.2s ease-in 1.6s
+}
+
+		
+		
+	</style>
