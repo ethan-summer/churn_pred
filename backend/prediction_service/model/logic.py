@@ -15,8 +15,9 @@ def sigmoid(x):
     inX_clipped = np.clip(x, -threshold, threshold)
     return 1.0 / (1.0 + np.exp(-inX_clipped))
 
-def stocGradAscent1(dataMatrix, classLabels, batchSize=32, numIter=200, lambda_reg=0.01):
-    m, n = np.shape(dataMatrix)
+def stocGradAscent1(train_file_path, batchSize=32, numIter=200, lambda_reg=0.01):
+    x_train, y_train, x_test, y_test = preprocess_data(file_path=train_file_path)
+    m, n = np.shape(x_train)
     weights = np.ones(n)   # 初始化权重，确保是n维的
     weights_array = np.array([])
     eps = 1e-6  # 避免除零错误的小值
@@ -26,8 +27,8 @@ def stocGradAscent1(dataMatrix, classLabels, batchSize=32, numIter=200, lambda_r
         np.random.shuffle(dataIndex) 
         for k in range(0, m, batchSize):
             batchIndex = dataIndex[k:min(k + batchSize, m)]  
-            dataBatch = dataMatrix[batchIndex]
-            labelBatch = classLabels[batchIndex]
+            dataBatch = x_train[batchIndex]
+            labelBatch = y_train[batchIndex]
             h = sigmoid(np.dot(dataBatch, weights))  
             error = labelBatch - h  
             gradient = np.dot(error, dataBatch) / batchSize  # 计算梯度，取小批量样本的平均值
@@ -38,7 +39,7 @@ def stocGradAscent1(dataMatrix, classLabels, batchSize=32, numIter=200, lambda_r
                 weights_array, weights, axis=0)  # 添加回归系数到数组中
     weights_array = weights_array.reshape(
         numIter * ((m + batchSize - 1) // batchSize), n)  # 改变维度
-    np.save('trainWeights_0.3.npy', weights)
+    np.save('trainWeights_0.2.npy', weights)
     return weights, weights_array
 
 def classifyVector(inX, weights):
@@ -53,7 +54,7 @@ def colicTest(train_file_path):
     trainWeights = np.load('./prediction_service/model/training_weights/trainWeights_0.2.npy')
     predictions = []
     predicted_score = []
-
+    print(x_test.shape)
     for i in range(len(x_test)):
         predicted_label = int(classifyVector(np.array(x_test[i]), trainWeights))
         #仅仅获得概率不转化成0或者1
@@ -61,16 +62,15 @@ def colicTest(train_file_path):
         predictions.append(predicted_label)
         predicted_score.append(score)
         
-    
     return predictions, y_test, predicted_score
 
 
     
 def Test_write_back(test_file_path,key):#
-    trainWeights = np.load('training_weights/trainWeights_0.2.npy')
+    trainWeights = np.load('prediction_service/model/training_weights/trainWeights_0.2.npy')
     
     test_data = pd.read_csv(test_file_path, engine="python", encoding="gbk")
-    x_test = test_data.fillna(0).values
+    x_test = test_data.fillna(0).values[:, 1:]
     
 
     scaler = StandardScaler()
@@ -99,11 +99,11 @@ def decrypt_data(test_file_path,key):
 if __name__ == '__main__':
     argsparser = argparse.ArgumentParser()
     
-    argsparser.add_argument('--train_file_path', type=str, default='input/internet_service_churn.csv',
+    argsparser.add_argument('--train_file_path', type=str, default='prediction_service\model\input\internet_service_churn.csv',
                         help='Training set path')
-    argsparser.add_argument('--test_file_path', type=str, default='input_test/churn_test.csv',
+    argsparser.add_argument('--test_file_path', type=str, default='prediction_service\model\input_test\churn_test.csv',
                         help='Testing set path')
-    argsparser.add_argument('--encrypt_file_path', type=str, default='input_test/churn_test_encrypt.csv',
+    argsparser.add_argument('--encrypt_file_path', type=str, default='prediction_service\model\input_test\churn_test_encrypt.csv',
                         help='Testing set path')
     argsparser.add_argument(
         "--encrypt_data",
@@ -120,12 +120,5 @@ if __name__ == '__main__':
     
     args = argsparser.parse_args()
         
-    if args.encrypt_data:
-        Test_write_back(args.test_file_path)
-        exit()
-    if args.decrypt_data:
-        decrypt_data(args.encrypt_file_path)
-        exit()
-        
-    colicTest(args.train_file_path)
+    stocGradAscent1(args.train_file_path)
 

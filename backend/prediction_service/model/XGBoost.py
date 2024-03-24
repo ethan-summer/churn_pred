@@ -4,6 +4,8 @@ import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, f1_score, confusion_matrix, roc_auc_score, roc_curve
 import matplotlib.pyplot as plt
+from DES import encrypt_csv_column
+from sklearn.preprocessing import StandardScaler 
 
 def log_loss_with_penalties(preds, dtrain):  
     epsilon = 1 #避免对0做log操作
@@ -36,6 +38,7 @@ def custom_eval_metric(preds, dtrain):
     return 'custom_loss', total_loss
 
 
+
 def xgboost(file_path):
     df = pd.read_csv(file_path, encoding="gbk")  
     df=df.fillna(0)  
@@ -56,6 +59,8 @@ def xgboost(file_path):
     evals = [(dtrain, 'train'), (dtest, 'test')]  
     bst = xgb.train(param, dtrain, num_round, obj=log_loss_with_penalties, evals=evals, feval=custom_eval_metric, evals_result=evals_result, verbose_eval=True, early_stopping_rounds=10)
     
+    bst.save_model(model_save_path)
+    
     # 使用训练好的模型进行预测   
     preds = bst.predict(dtest)
 
@@ -63,6 +68,30 @@ def xgboost(file_path):
     y_pred_labels = [1 if pred >= 0.5 else 0 for pred in preds]
     
     return y_pred_labels, y_test, preds
+
+
+model_save_path = r'prediction_service\model\training_weights\xgboost_model.txt'
+
+def xgboost_pred_and_encrypt(test_file_path,key):
+    test_data = pd.read_csv(test_file_path, engine="python", encoding="gbk")
+    x_test = test_data.fillna(0).values
+    
+    bst = xgb.Booster()
+    bst.load_model(model_save_path)
+    
+    x_test = xgb.DMatrix(x_test)
+    
+    preds = bst.predict(x_test)
+    
+
+    # 将预测结果转换为0和1的标签  
+    y_pred_labels = [1 if pred >= 0.5 else 0 for pred in preds]
+
+    test_data['pred_result'] = y_pred_labels
+    #新文件名原来的路径结尾加上encrypt
+    new_file_path = test_file_path.split(".")[0] + "_encrypt.csv"
+    test_data.to_csv(new_file_path, index=False, encoding="gbk")
+    encrypt_csv_column(new_file_path,key)
     
 
 # # 计算准确率  

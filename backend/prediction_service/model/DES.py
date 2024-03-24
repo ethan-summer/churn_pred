@@ -1,9 +1,9 @@
 import pandas as pd
-# from Crypto.Cipher import DES
+from Crypto.Cipher import DES
 
-# from Crypto.Util.Padding import pad, unpad
-from Cryptodome.Cipher import DES
-from Cryptodome.Util.Padding import pad, unpad
+from Crypto.Util.Padding import pad, unpad
+# from Cryptodome.Cipher import DES
+# from Cryptodome.Util.Padding import pad, unpad
 
 import argparse
 import base64

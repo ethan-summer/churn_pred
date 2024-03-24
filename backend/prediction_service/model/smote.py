@@ -11,8 +11,8 @@ def preprocess_data(file_path,  test_size=0.15, random_state=42):
     data = pd.read_csv(file_path, engine="python", encoding="gbk")
     data = data.fillna(0)
 
-    x = data.iloc[:, :-1].values 
-
+    x = data.iloc[:, 1:-1].values 
+    print(x.shape)
     y = data.iloc[:, -1].values  
 
     # 划分训练集和测试集
