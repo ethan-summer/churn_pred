@@ -20,11 +20,24 @@ def des_encrypt(plaintext, key):
     encrypted = cipher.encrypt(padded_text)
     return encrypted
 
-def des_decrypt(ciphertext, key):
-    cipher = DES.new(key, DES.MODE_ECB)
-    decrypted_padded_text = cipher.decrypt(ciphertext)
-    decrypted = unpad(decrypted_padded_text, DES.block_size)
-    return int(decrypted.decode('utf-8'))  
+def des_decrypt(encrypted_data_base64, key):
+    try:
+        cipher = DES.new(key, DES.MODE_ECB)
+        encrypted_data_padded = base64.b64decode(encrypted_data_base64)
+        decrypted_padded_data = cipher.decrypt(encrypted_data_padded)
+        decrypted_data = unpad(decrypted_padded_data, DES.block_size)
+        #打印decrypted_data的类型
+        print(decrypted_data)
+        # 确保解密后得到的是一个纯数字字符串
+        decrypted_string = decrypted_data.decode('utf-8')
+        print(decrypted_string)
+        if not decrypted_string.isdigit():
+            print(f"Decrypted data is not a digit string: {decrypted_string}")
+            return None
+        return int(decrypted_string)
+    except Exception as e:
+        print(f"Error occurred during decryption or conversion: {e}")
+        return None 
 
 # def encrypt_csv_column(file_path, key):#加密
 #     df = pd.read_csv(file_path)
@@ -38,7 +51,7 @@ def encrypt_csv_column(file_path, key):
     df = pd.read_csv(file_path)
     
     # 加密'id'列
-    df["id"] = df["id"].apply(lambda x: base64.b64encode(des_encrypt(str(x).encode('utf-8'), key)).decode('utf-8'))
+    df["id"] = df["id"].apply(lambda x: base64.b64encode(des_encrypt(x, key)).decode('utf-8'))
     
     # 指定导出的路径和文件名
     output_file_path = './prediction_service/model/input_test/churn_test_encrypt.csv'
@@ -49,7 +62,7 @@ def encrypt_csv_column(file_path, key):
 def decrypt_csv_column(file_path,key):#解密
     df = pd.read_csv(file_path)
     try:
-        df["id"] = df["id"].apply(lambda x: des_decrypt(base64.b64decode(x.encode('utf-8')), key))
+        df["id"] = df["id"].apply(lambda x: des_decrypt(x, key))
     except Exception as e:
             print(f"Error occurred: {e}")
             return False
