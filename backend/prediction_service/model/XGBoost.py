@@ -77,7 +77,7 @@ def xgboost_pred_and_encrypt(test_file_path,key):
     x_test = test_data.fillna(0).values
     
     bst = xgb.Booster()
-    bst.load_model(model_save_path)
+    bst.load_model('./prediction_service/model/training_weights/xgboost_model.txt')
     
     x_test = xgb.DMatrix(x_test)
     

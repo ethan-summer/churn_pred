@@ -91,7 +91,7 @@ def Test_write_back(test_file_path,key):#
 def decrypt_data(test_file_path,key):
     
     test_data = pd.read_csv(test_file_path, engine="python", encoding="gbk")
-    new_file_path = test_file_path.split(".")[0] + "_to_encrypt.csv"
+    new_file_path = test_file_path.split(".")[0] + "_to_decrypt.csv"
     test_data.to_csv(new_file_path, index=False, encoding="gbk")
     
     decrypt_csv_column(new_file_path,key)

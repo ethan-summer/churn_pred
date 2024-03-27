@@ -1,7 +1,18 @@
 <template>
   <div class="container-fluid" style="max-width: 1000px;">
     <h1 class="text-center mb-4">Image Gallery</h1>
-    <button @click="fetchData" class="btn btn-primary mb-4">获取三个模型训练对比图</button>
+    <!-- Add a select dropdown for model selection -->
+    <div class="mb-3">
+      <label for="modelSelect" class="form-label">选择模型</label>
+      <select v-model="selectedModel" class="form-select" id="modelSelect">
+        <option disabled value="">请选择要查看的模型</option>
+        <option >LogisticRegression</option>
+        <option>XGBoost</option>
+        <option>RandomForest</option>
+        <option>三模型对比图</option>
+      </select>
+    </div>
+    <button @click="fetchData" class="btn btn-primary mb-4">获取模型训练评估图</button>
     <div v-if="error" class="alert alert-danger">{{ error }}</div>
     <div v-if="images.length" class="images-container">
       <div v-for="(imageUrl, index) in images" :key="index" class="image-entry">
@@ -12,7 +23,6 @@
   </div>
 </template>
 
-
 <script>
 import axios from 'axios';
 
@@ -20,13 +30,22 @@ export default {
   data() {
     return {
       images: [],
-      error: null
+      error: null,
+      selectedModel: '' // Add a data property for the selected model
     };
   },
   methods: {
     async fetchData() {
+      if (!this.selectedModel) {
+        this.error = 'Please select a model before fetching images.';
+        return;
+      }
       try {
-        const response = await axios.get('http://localhost:8000/predictss/list_images/');
+        // Adjust the axios call to send a POST request
+        const response = await axios.post('http://localhost:8000/predictss/list_images/', {
+          model: this.selectedModel
+        });
+        console.log(response)
         this.images = response.data;
         this.error = null;
       } catch (error) {
@@ -36,7 +55,7 @@ export default {
       }
     },
     extractFileName(url) {
-      // 从URL提取文件名
+      // Extract the file name from URL
       return url.split('/').pop();
     }
   }
@@ -44,6 +63,7 @@ export default {
 </script>
 
 <style>
+/* No changes in the style */
 .images-container {
   display: flex;
   flex-direction: column;
@@ -62,4 +82,4 @@ export default {
   border: 1px solid #ddd;
   box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.1);
 }
-</style>
+</style> 
