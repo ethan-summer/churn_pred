@@ -1,7 +1,7 @@
 # -*- coding:UTF-8 -*-
 from matplotlib.font_manager import FontProperties
 from sklearn.metrics import f1_score
-from smote import preprocess_data , preprocess_tset_data
+from smote import preprocess_data 
 from DES import encrypt_csv_column , decrypt_csv_column
 from sklearn.preprocessing import StandardScaler
 import pandas as pd
@@ -15,12 +15,12 @@ def sigmoid(x):
     inX_clipped = np.clip(x, -threshold, threshold)
     return 1.0 / (1.0 + np.exp(-inX_clipped))
 
-def stocGradAscent1(train_file_path, batchSize=32, numIter=200, lambda_reg=0.01):
+def Gradient_Ascent_Algorithm(train_file_path, batchSize=32, numIter=200, lambda_reg=0.01):
     x_train, y_train, x_test, y_test = preprocess_data(file_path=train_file_path)
     m, n = np.shape(x_train)
-    weights = np.ones(n)   # 初始化权重，确保是n维的
+    weights = np.ones(n)   
     weights_array = np.array([])
-    eps = 1e-6  # 避免除零错误的小值
+    eps = 1e-6  
 
     for j in range(numIter):
         dataIndex = list(range(m))
@@ -83,7 +83,7 @@ def Test_write_back(test_file_path,key):#
         predictions.append(predicted_label)
 
     test_data['pred_result'] = predictions
-    #新文件名原来的路径结尾加上encrypt
+    
     new_file_path = test_file_path.split(".")[0] + "_encrypt.csv"
     test_data.to_csv(new_file_path, index=False, encoding="gbk")
     encrypt_csv_column(new_file_path,key)
@@ -120,5 +120,5 @@ if __name__ == '__main__':
     
     args = argsparser.parse_args()
         
-    stocGradAscent1(args.train_file_path)
+    Gradient_Ascent_Algorithm(args.train_file_path)
 

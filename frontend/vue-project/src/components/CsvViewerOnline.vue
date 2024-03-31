@@ -37,7 +37,7 @@ export default {
   data() {
     return {
       encryptedCsvUrl: 'http://localhost:8000/csv/churn_test_encrypt.csv',
-      decryptedCsvUrl: 'http://localhost:8000/csv/churn_test_encrypt_to_encrypt.csv',
+      decryptedCsvUrl: 'http://localhost:8000/csv/churn_test_encrypt_to_decrypt.csv',
       csvUrl: '', // 当前展示的CSV文件的URL
       csvData: [],
       headers: [],
@@ -67,6 +67,7 @@ export default {
         console.error('Error loading CSV data:', error);
       }
     },
+
     viewEncryptedData() {
       this.loadCsvData(this.encryptedCsvUrl);
     },
@@ -76,11 +77,11 @@ export default {
           key: this.decryptionKey,
         });
         
-        if (response.status === 200) {
+        if (response.status === 201) {
           this.decryptFailed = false;
           setTimeout(() => {
             this.loadCsvData(this.decryptedCsvUrl); // 加载并展示解密后的数据
-          }, 5000);
+          }, 10000);
         } else {
           this.decryptFailed = true;
         }
