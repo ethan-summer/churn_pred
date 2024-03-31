@@ -64,12 +64,13 @@ v20.11.1
 
 点击这个链接安装nodejs 20版本的windows版本  另外
 
-依次运行下面的命令
+依次运行下面的命令 #在forntend目录下执行
 
 ## 工程 Setup
 
 ```sh
 npm install
+npm install -g vite
 ```
 
 ### 运行程序
@@ -222,9 +223,8 @@ def list_images(request):
 
 ```
 
-## 如何协作
+## 后端运行
 
-![image-20240323211110115](./assets/image-20240323211110115.png)
 
 与模型相关的所有的文件都在prediction_service/model这个文件夹下，以后所有的与模型相关的代码都放在这里面，然后对于调用，需要模仿view.py里的predict函数的写法调用model里面的脚本  然后再在prediction_service/urls.py里声明他的子路由  、
 
@@ -232,9 +232,6 @@ def list_images(request):
  path('list_images/', views.list_images, name='list_images'),
 ```
 
-
-
-##### **合作愉快！**
 
 django运行  在backend目录下
 
