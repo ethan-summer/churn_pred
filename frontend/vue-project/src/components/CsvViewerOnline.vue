@@ -10,7 +10,14 @@
         <a :href="csvUrl" class="btn btn-primary align-self-center" download>下载</a>
       </div>
     </div>
-    <p v-if="decryptFailed">解密失败，请重试。</p>
+    <!-- <p v-if="decryptFailed">解密失败，请重试。</p> -->
+    <div class="alert alert-warning"  v-if="decryptFailed">
+    <a href="#" class="close" data-dismiss="alert">
+        &times;
+    </a>
+    <strong>警告！</strong>您的秘钥错误 请重新输入。
+</div>
+
     <div v-if="csvData.length">
       <table class="table">
         <thead>
@@ -81,9 +88,10 @@ export default {
           this.decryptFailed = false;
           setTimeout(() => {
             this.loadCsvData(this.decryptedCsvUrl); // 加载并展示解密后的数据
-          }, 10000);
+          }, 0);
         } else {
           this.decryptFailed = true;
+         
         }
       } catch (error) {
         console.error('Error decrypting data:', error);
@@ -94,4 +102,3 @@ export default {
   }
 }
 </script>
-

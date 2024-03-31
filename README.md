@@ -64,7 +64,7 @@ v20.11.1
 
 点击这个链接安装nodejs 20版本的windows版本  另外
 
-依次运行下面的命令 #在forntend目录下执行
+依次运行下面的命令 #在forntend/vue/project目录下执行
 
 ## 工程 Setup
 

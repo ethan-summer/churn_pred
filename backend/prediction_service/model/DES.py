@@ -43,11 +43,9 @@ def encrypt_csv_column(file_path, key):
 
 def decrypt_csv_column(file_path,key):
     df = pd.read_csv(file_path)
-    try:
-        df["pred_result"] = df["pred_result"].apply(lambda x: des_decrypt(base64.b64decode(x.encode('utf-8')), key))
-    except Exception as e:
-            print(f"Error occurred: {e}")
-            return False
+
+    df["pred_result"] = df["pred_result"].apply(lambda x: des_decrypt(base64.b64decode(x.encode('utf-8')), key))
+
     
     df.to_csv(file_path, index=False)
     return True
