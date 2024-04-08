@@ -81,22 +81,6 @@ npm run dev
 
 
 
-# 日志
-
-3.19完成前端技术展示代码
-
-
-
-3.20完成后端技术展示代码
-
-3.21解决跨域问题。解决文件上传功能，将
-
-3.22完成前后端对接。
-
-## 大事件
-
-3.23完成训练和前后端对接
-
 ### 后端django项目介绍
 
 django 采用的是功能化模块管理 ，对于某个功能要执行一个python manage.py startapp your_app的语句来创建这个功能模块
@@ -109,7 +93,6 @@ django 采用的是功能化模块管理 ，对于某个功能要执行一个pyt
 python manage.py startapp prediction_service
 ```
 
-![image-20240323205607342](./assets/image-20240323205607342.png)
 
 文件夹下多了这个目录 ，然后在graduation的urls下引入预测模块对应的url
 
@@ -239,4 +222,8 @@ django运行  在backend目录下
 python manage.py runserver
 
 ```
+
+
+注意：预测的文件只要是churn_test.py就行无在乎路径
+    解密和加密要等5秒左右 文件会自动显示在编写的excel显示器前端
 
