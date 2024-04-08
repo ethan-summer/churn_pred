@@ -228,7 +228,7 @@ if __name__ == "__main__":
         help="decrypt",
     )
     args = argsparser.parse_args()
-    key = args.key.encode('ascii') 
+    key = args.key
     if args.encrypt_data:
         if args.model == 'xgboost':
             xgboost_pred_and_encrypt(args.test_file_path,key)
